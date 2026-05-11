@@ -8,6 +8,7 @@ use crate::{SharedState, Window};
 mod top_panel;
 mod demos;
 mod tools;
+mod duck; // 1. Add module declaration
 
 pub(crate) fn regist_windows(shared_state: &mut SharedState) -> Vec<Box<dyn Window + Send>> {
     vec![
@@ -25,6 +26,9 @@ pub(crate) fn regist_windows(shared_state: &mut SharedState) -> Vec<Box<dyn Wind
         Box::new(tools::FogWindow::default()),
         Box::new(tools::PostProcessingMenu::default()),
         Box::new(tools::MaterialInspector::new(shared_state)),
+
+        Box::new(duck::MyWindow::default()), // 2. Add your window instance here
+
         // TODO: sounds emitter window
     ]
 }
@@ -53,4 +57,9 @@ pub(crate) fn regist_events(_engine: &Engine, _shared_state: &mut SharedState) {
 pub(crate) fn regist_hotkeys(_engine: &Engine, hotkeys_manager: &mut HotkeyManager) {
     hotkeys_manager.bind(KeyCode::F3, OverlayEvent::ToggleOverlay, false);
     hotkeys_manager.bind(KeyCode::F4, OverlayEvent::ToggleWindow("Simple Window"), true);
+    
+    // 3. Bind a key to toggle your new window!
+    // The `false` means this input is consumed and won't be passed to the game.
+    //let's not do that
+    //hotkeys_manager.bind(KeyCode::F5, OverlayEvent::ToggleWindow("My Window"), false);
 }
